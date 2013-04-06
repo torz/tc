@@ -47,13 +47,13 @@ class BrowserPanel(urwid.ListBox):
     def update_body(self, button, choice):
         self.update_file_list(choice)
         self.body = self.create_buttons()
-
+        # loop.draw_screen()
                 
 #class MainFrame(urwid.Frame):
 #    def __init__():
 
-def exit_program(button):
-    if button == 'q':
+def exit_program(key):
+    if key == 'q':
         raise urwid.ExitMainLoop()
 
 def main():
