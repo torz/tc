@@ -2,15 +2,64 @@
 import os
 import urwid
 
+palette = [
+    ('banner', 'black', 'light gray'),
+    ('streak', 'black', 'dark red'),
+    ('bg', 'black', 'dark blue'),]
+
+
 class BrowserPanel(urwid.ListBox):
     def __init__(self):
+        self.rootPath = '/'
+        self.previousPath = '/'
+        self.currentPath = '/'
+        self.fileList = os.listdir(self.currentPath)
+        body = self.create_buttons() 
+        super(BrowserPanel, self).__init__(body)
 
+    def update_file_list(self, choice):
+        if choice == '..':
+            newPath = os.path.dirname(self.currentPath)
+        else:
+            newPath = os.path.join(os.path.join(self.currentPath, choice))
+        if os.path.isdir(newPath):
+            self.previousPath = self.currentPath
+            self.currentPath = newPath
+        try:
+            self.fileList = os.listdir(self.currentPath)
+        except:
+            self.currentPath = self.previousPath
+            self.fileList = os.listdir(self.currentPath)
+        if self.currentPath != '/':
+            self.fileList.insert(0, '..')
 
-class MainFrame(urwid.Frame):
-    def __init__():
+    def create_buttons(self):
+        body = [urwid.Text(self.currentPath), urwid.Divider()]
+        for oneFile in self.fileList:
+            button = urwid.Button(oneFile)
+            if os.path.isdir(os.path.join(self.currentPath, oneFile)):
+                #urwid.connect_signal(button, 'click', self.create_buttons, oneFile)
+                urwid.connect_signal(button, 'click', self.update_wid, oneFile)
+            body.append(urwid.AttrMap(button, None, focus_map='reversed'))
+        return urwid.SimpleFocusListWalker(body)
+    
+    def update_wid(self, button, choice):
+        self.update_file_list(choice)
+        #main.original_widget = self.create_buttons()
+        self.body = self.create_buttons()
 
+                
+#class MainFrame(urwid.Frame):
+#    def __init__():
+def exit_program(button):
+    if button == 'q':
+        raise urwid.ExitMainLoop()
 
 def main():
+    mainBrowser = BrowserPanel()
+    main = urwid.Padding(mainBrowser)
+    loop = urwid.MainLoop(main, unhandled_input=exit_program)
+    loop.run()
 
 if __name__ == '__main__':
     main()
