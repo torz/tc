@@ -5,12 +5,11 @@ import urwid
 palette = [
     (None,  'light gray', 'black'),
     ('reversed', 'standout', ''),
-    ('banner', 'black', 'light gray'),
+    ('banner', 'black', 'light blue'),
+    ('body', 'yellow', 'light blue'),
     ('streak', 'black', 'dark red'),
     ('bg', 'black', 'dark blue'),]
 
-
-#class BrowserPanel(urwid.LineBox):
 class BrowserPanel(urwid.WidgetPlaceholder):
     def __init__(self, path):
         self.rootPath = '/'
@@ -43,7 +42,9 @@ class BrowserPanel(urwid.WidgetPlaceholder):
             if os.path.isdir(os.path.join(self.currentPath, oneFile)):
                 urwid.connect_signal(button, 'click', self.update_body, oneFile)
             body.append(urwid.AttrMap(button, None, focus_map='reversed'))
-        return urwid.LineBox(urwid.ListBox(urwid.SimpleFocusListWalker(body)), self.currentPath)
+        return urwid.AttrMap(urwid.LineBox(urwid.ListBox(urwid.SimpleFocusListWalker(body)),
+                                            self.currentPath),
+                                            'body')
     
     def update_body(self, button, choice):
         self.update_file_list(choice)
