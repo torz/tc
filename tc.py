@@ -7,6 +7,9 @@ palette = [
     ('reversed', 'standout', ''),
     ('banner', 'black', 'light blue'),
     ('body', 'yellow', 'light blue'),
+    ('bodyrev', 'yellow', 'dark red'),
+    ('dirs', 'black', 'light blue'),
+    ('dirsrev', 'white', 'dark red'),
     ('streak', 'black', 'dark red'),
     ('bg', 'black', 'dark blue'),]
 
@@ -41,7 +44,9 @@ class BrowserPanel(urwid.WidgetPlaceholder):
             button = urwid.Button(oneFile)
             if os.path.isdir(os.path.join(self.currentPath, oneFile)):
                 urwid.connect_signal(button, 'click', self.update_body, oneFile)
-            body.append(urwid.AttrMap(button, None, focus_map='reversed'))
+                body.append(urwid.AttrMap(button, 'dirs', focus_map='dirsrev'))
+            else:
+                body.append(urwid.AttrMap(button, None, focus_map='bodyrev'))
         return urwid.AttrMap(urwid.LineBox(urwid.ListBox(
             urwid.SimpleFocusListWalker(body)), self.currentPath), 'body')
     
