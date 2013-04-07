@@ -10,14 +10,15 @@ palette = [
     ('bg', 'black', 'dark blue'),]
 
 
-class BrowserPanel(urwid.LineBox):
+#class BrowserPanel(urwid.LineBox):
+class BrowserPanel(urwid.WidgetPlaceholder):
     def __init__(self, path):
         self.rootPath = '/'
         self.previousPath = ''
         self.currentPath = path
         self.fileList = sorted(os.listdir(self.currentPath))
         body = self.create_buttons()
-        super(BrowserPanel, self).__init__(body, self.currentPath)
+        super(BrowserPanel, self).__init__(body)
 
     def update_file_list(self, choice):
         if choice == '..':
@@ -42,7 +43,7 @@ class BrowserPanel(urwid.LineBox):
             if os.path.isdir(os.path.join(self.currentPath, oneFile)):
                 urwid.connect_signal(button, 'click', self.update_body, oneFile)
             body.append(urwid.AttrMap(button, None, focus_map='reversed'))
-        return urwid.ListBox(urwid.SimpleFocusListWalker(body))
+        return urwid.LineBox(urwid.ListBox(urwid.SimpleFocusListWalker(body)), self.currentPath)
     
     def update_body(self, button, choice):
         self.update_file_list(choice)
