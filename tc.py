@@ -11,10 +11,10 @@ palette = [
 
 
 class BrowserPanel(urwid.LineBox):
-    def __init__(self):
+    def __init__(self, path):
         self.rootPath = '/'
-        self.previousPath = '/'
-        self.currentPath = '/'
+        self.previousPath = ''
+        self.currentPath = path
         self.fileList = sorted(os.listdir(self.currentPath))
         body = self.create_buttons()
         super(BrowserPanel, self).__init__(body, self.currentPath)
@@ -53,8 +53,8 @@ def exit_program(key):
         raise urwid.ExitMainLoop()
 
 def main():
-    panel1 = BrowserPanel()
-    panel2 = BrowserPanel()
+    panel1 = BrowserPanel('/')
+    panel2 = BrowserPanel('/')
     main = urwid.Columns([panel1, panel2])
     loop = urwid.MainLoop(main, palette, unhandled_input=exit_program)
     loop.run()
