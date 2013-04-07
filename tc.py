@@ -5,18 +5,16 @@ import urwid
 palette = [
     (None,  'light gray', 'black'),
     ('reversed', 'standout', ''),
-    ('banner', 'black', 'light blue'),
     ('body', 'yellow', 'light blue'),
     ('bodyrev', 'yellow', 'dark red'),
     ('dirs', 'black', 'light blue'),
     ('dirsrev', 'white', 'dark red'),
-    ('streak', 'black', 'dark red'),
     ('bg', 'black', 'dark blue'),]
 
 class BrowserPanel(urwid.WidgetPlaceholder):
     def __init__(self, path):
         self.rootPath = '/'
-        self.previousPath = ''
+        self.previousPath = self.rootPath
         self.currentPath = path
         self.fileList = sorted(os.listdir(self.currentPath))
         body = self.create_buttons()
